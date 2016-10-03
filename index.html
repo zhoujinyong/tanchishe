@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>贪吃蛇游戏</title>
+	<script src="jquery.js" type="text/javascript"></script>
+	<script src="function.js" type="text/javascript"></script>
+</head>
+<style type="text/css">
+	body{
+		background: url(image/221.png);
+		overflow-X: hidden;
+	}
+	*{
+		padding: 0;
+		margin: 0;
+		text-decoration: none;
+		list-style: none;
+		border: 0;
+	}
+	#box{
+		width: 800px;
+		height: 600px;
+		/*border: 1px solid red;*/
+		position: absolute;
+		left: 0;
+		top:0;
+		bottom: 0;
+		right: 0;
+		margin: auto;
+	}
+	#scene{
+		width: 600px;
+		height: 600px;
+		display: none;
+		background: url(image/668.jpg);
+		border: 1px solid #005624;
+		float: left;
+	}
+	#button{
+		width: 150px;
+		height: 600px;
+		float: right;
+		display: none;
+		/*border: 1px solid red;*/
+		position: relative;
+	}
+	#btn-box{
+		position: absolute;
+		left: 30px;
+		top:10px;
+		display: none;
+	}
+	.xbtn{
+		width: 85px;
+		height: 52px;
+		transition:transform 0.5s ease;
+		transform:translateY(0);
+	}
+	.fir{
+		background: url(image/chu.png);
+		background-size: 85px;
+		background-repeat: no-repeat;
+	}
+	.sen{
+		background: url(image/zhong.png);
+		background-size: 85px;
+		background-repeat: no-repeat;
+		margin-top: 0;
+		margin-top: 10px;
+	}
+	.thi{
+		background: url(image/gao.png);
+		background-size: 85px;
+		background-repeat: no-repeat;
+		margin-top: 0;
+		margin-top: 10px;
+	}
+	.btn{
+		width: 150px;
+		height: 60px;
+		background: #fff;
+		margin-top: 90px;
+		background: url(image/dengji.png);
+		background-size: 150px auto;
+		transition:transform 0.5s ease;
+		transform:translateY(0);
+	}
+	.second{
+		background: url(image/start.png);
+		background-size: 150px auto;
+	}
+	.third{
+		background: url(image/zanting.png);
+		background-size: 150px auto;
+	}
+	.fourth{
+		background: url(image/jieshu.png);
+		background-size: 150px auto;
+	}
+	.first{
+		margin-top: 50px;
+	}
+	/*.scene{
+		
+		transition:transform 1s ease;
+		transform:translateY(0);
+
+	}*/
+	.animate{
+		transform:translateY(10px);
+	}
+	#zhe{
+		width: 100%;
+		height: 100%;
+		position: relative;
+		position: absolute;
+		left: 0;
+		top:0;
+		bottom: 0;
+		right: 0;
+		margin: auto;
+		background: url(image/65.png) no-repeat center center;
+		background-color: #fff;
+		background-size: 
+	}
+	#zhe input{
+		width: 180px;
+		height: 200px;
+		position: absolute;
+		bottom: 0;
+		left: 50%;
+		margin-left: -90px;
+		font-family: "微软雅黑";
+		line-height: 50px;
+		text-align: center;
+		font-size: 26px;
+		opacity: 0;
+	}
+	#scene div{
+		width: 28px;
+		height: 28px;
+		border: 1px solid rgba(189,127,70,0.1);
+		float: left;
+	}
+	/*.she{
+		background: red;
+	}*/
+	.tou{
+		background: url(image/tou.png);
+		background-size: 28px 28px;
+	}
+	.zhuan{
+		transform:rotate3d(0,1,0,180deg);
+	}
+	.zhuan9{
+		transform:rotate(90deg)
+	}
+	.zhuan27{
+		transform:rotate(270deg)
+	}
+	.shen{
+		background: url(image/shen.png);
+		background-size: 28px 28px;
+	}
+	.wei{
+		background: url(image/wei.png);
+		background-size: 28px 28px;
+	}
+	.food{
+		/*background: blue;*/
+		background: url(image/guo.png);
+		background-size: 28px 28px;
+		/*margin-left: 5px;*/
+	}
+	.bai{
+		background: #fff;
+	}
+	#left{
+		width: 50%;
+		height: 100%;
+		border: 1px solid red;
+		position: absolute;
+		left: 0;
+		top:0;
+		background: url(image/8.jpg) no-repeat right center;
+		/*background-size: 100% 50%; */
+	}
+	#right{
+		width: 50%;
+		height: 100%;
+		border: 1px solid red;
+		position: absolute;
+		right: 0;
+		top:0;
+		background: url(image/8.jpg) no-repeat left center;
+		/*background-size: 100% 50%; */
+	}
+</style>
+
+<script type="text/javascript">
+	// var j = jQuery.noConflict();
+	
+
+	$(function(){
+		var t;
+		var time=400;
+		var box=$("#scene")
+		var flag=true
+		// 画表格
+		for (var i = 0; i < 20; i++) {
+			for (var j = 0; j < 20; j++) {
+				var div=$("<div>");
+				div.id=i+"-"+j
+				box.appendChild(div)
+			}
+		}
+		var she=[{x:0,y:0},{x:0,y:1},{x:0,y:2}];
+
+		for (var i = 0; i < she.length; i++) {
+			// var obj=$("#"+she[i].x+"-"+she[i].y)
+			// obj.className="she"
+			var wei=$("#"+she[0].x+"-"+she[0].y)
+			wei.className="wei"
+			var shen=$("#"+she[1].x+"-"+she[1].y)
+			shen.className="shen"
+			var tou=$("#"+she[2].x+"-"+she[2].y)
+			tou.className="tou"
+		}
+		function getFood(){
+			do{
+				var x=Math.floor(Math.random()*20)
+				var y=Math.floor(Math.random()*20)
+			}while(panduan(x,y));
+			
+			var foodobj=$("#"+x+"-"+y)
+			foodobj.className="food"
+			return {x:x,y:y};
+		}
+		function panduan(a,b){
+			for (var i = 0; i < she.length; i++) {
+				if(she[i].x==a&&she[i].y==b){
+					return true;
+				}
+			}
+			return false;
+		}
+		var food=getFood();
+		var fangxiang="you"
+		var x;
+		var y;
+		function run(){
+			var jiutou=she[she.length-1]
+			if(fangxiang=="you"){
+				var newtou=$("#"+jiutou.x+"-"+(jiutou.y+1))
+				var jiutous=$("#"+jiutou.x+"-"+(jiutou.y))
+				var xinwei=$("#"+she[1].x+"-"+she[1].y)
+				if(newtou==null||panduan(jiutou.x,jiutou.y+1)){
+					alert("game over")
+					// if(!flag){
+					// 	clearInterval(t)
+					// 	flag=true;
+					// }
+					clearInterval(t)
+					flag=true
+					return;
+				}
+				x=jiutou.x;
+				y=jiutou.y+1
+				newtou.className="tou"
+				jiutous.className="shen"
+				xinwei.className="wei"
+				she.push({x:jiutou.x,y:jiutou.y+1})
+
+			}else if(fangxiang=="zuo"){
+				var newtou=$("#"+jiutou.x+"-"+(jiutou.y-1))
+				var jiutous=$("#"+jiutou.x+"-"+(jiutou.y))
+				var xinwei=$("#"+she[1].x+"-"+she[1].y)
+				if(newtou==null||panduan(jiutou.x,jiutou.y-1)){
+					alert("game over")
+					clearInterval(t);
+					flag=true
+					return;
+				}
+				x=jiutou.x;
+				y=jiutou.y-1
+				newtou.className="tou zhuan"
+				jiutous.className="shen zhuan"
+				xinwei.className="wei zhuan"
+				she.push({x:jiutou.x,y:jiutou.y-1})
+			}else if(fangxiang=="xia"){
+				var jiuwei=$("#"+she[0].x+"-"+she[0].y)
+				var newtou=$("#"+(jiutou.x+1)+"-"+(jiutou.y))
+				var jiutous=$("#"+jiutou.x+"-"+(jiutou.y))
+				var xinwei=$("#"+she[1].x+"-"+she[1].y)
+				if(newtou==null||panduan(jiutou.x+1,jiutou.y)){
+					alert("game over")
+					clearInterval(t);
+					flag=true
+					return;
+				}
+				x=jiutou.x+1;
+				y=jiutou.y
+				newtou.className="tou zhuan9"
+				jiutous.className="shen zhuan9"
+				xinwei.className="wei zhuan9"
+				she.push({x:jiutou.x+1,y:jiutou.y})
+			}else if(fangxiang=="shang"){
+				var newtou=$("#"+(jiutou.x-1)+"-"+(jiutou.y))
+				var jiutous=$("#"+jiutou.x+"-"+(jiutou.y))
+				var xinwei=$("#"+she[1].x+"-"+she[1].y)
+				if(newtou==null||panduan(jiutou.x-1,jiutou.y)){
+					alert("game over")
+					clearInterval(t);
+					flag=true
+					return;
+				}
+				x=jiutou.x-1;
+				y=jiutou.y;
+				newtou.className="tou zhuan27"
+				jiutous.className="shen zhuan27"
+				xinwei.className="wei zhuan27"
+				she.push({x:jiutou.x-1,y:jiutou.y})
+			}
+			if(food.x==x&&food.y==y){
+				food=getFood()
+			}else{
+				var shewei=$("#"+she[0].x+"-"+she[0].y)
+				shewei.className=""
+				she.shift();
+			}
+			
+		}
+		// var t=setInterval(run,200)
+		document.onkeydown=function(e){
+			var e=e||window.event;
+			var nub=e.keyCode;
+			if(nub==37){
+				if(fangxiang=="you"){
+					return;
+				}
+				fangxiang="zuo"
+			}else if(nub==38){
+				if(fangxiang=="xia"){
+					return;
+				}
+				fangxiang="shang"
+			}else if(nub==39){
+				if(fangxiang=="zuo"){
+					return;
+				}
+				fangxiang="you"
+			}else if(nub==40){
+				if(fangxiang=="shang"){
+					return;
+				}
+				fangxiang="xia"
+			}
+		}
+
+
+
+		var j = jQuery.noConflict();
+		j("input").on("click",function(){
+//			 fangxiang="you"	
+			// she=[]
+			// she=[{x:0,y:0},{x:0,y:1},{x:0,y:2}];
+			j("#zhe").slideUp(1000).delay(100).queue(function(){
+				// j("#scene").addClass("animate")
+				j("#scene").slideDown(800).delay(100).queue(function(){
+					j("#button").fadeIn(800)
+					j(this).dequeue()
+				})	
+				
+				j(this).dequeue()
+			})
+
+		})
+//		var flag=true;
+		j(".second").on("click",function(){
+			if(flag){
+				flag=false
+				t=setInterval(run,time)
+			}
+			j(this).addClass("animate").delay(200)
+				.queue(function(){
+					j(this).removeClass("animate").dequeue()
+				})
+		})
+		j(".third").on("click",function(){
+			j(this).addClass("animate").delay(200)
+				.queue(function(){
+					j(this).removeClass("animate").dequeue()
+				})
+				clearInterval(t)
+				flag=true
+		})
+		j(".fourth").on("click",function(){
+//			j(this).addClass("animate").delay(200)
+//				.queue(function(){
+//					j(this).removeClass("animate").dequeue()
+//				})
+			if(confirm("游戏正在进行，是否确认退出")){	
+				clearInterval(t)
+				j("#scene").slideUp(800).queue(function(){
+					j("#button").fadeOut(800).queue(function(){
+						j("#zhe").slideDown(400)
+						j(this).dequeue()
+					})
+					j(this).dequeue()
+				})
+			}else{
+				return;
+
+			}
+			
+		})
+		j(".first").on("click",function(){
+			j(this).css("opacity",0)
+			j("#btn-box").css("display","block")
+		})
+		j(".xbtn").on("click",function(){
+			j("#btn-box").css("display","none")
+			j(".first").css("opacity",1)
+		})
+		j(".fir").on("click",function(){
+			time=500;
+		})
+		j(".sen").on("click",function(){
+			time=400;
+		})
+		j(".thi").on("click",function(){
+			time=200;
+		})
+
+	})
+</script>
+<body>
+	<div id="box">
+		<div id="scene" class="scene">	
+		</div>
+		<div id="button">
+			<div class="btn first"></div>
+			<div class="btn second"></div>
+			<div class="btn third"></div>
+			<div class="btn fourth"></div>
+			<div id="btn-box">
+				<div class="xbtn fir"></div>
+				<div class="xbtn sen"></div>
+				<div class="xbtn thi"></div>
+			</div>
+		</div>
+	</div>
+	<div id="zhe">
+		<input type="text" value="进入游戏">
+		<!-- <div id="left"></div>
+		<div id="right"></div> -->
+	</div>
+</body>
+</html>
